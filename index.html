@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f1e8">
+  <title>隐私政策 · 记事本</title>
+  <meta name="description" content="记事本（NativeNotes）隐私政策">
+  <style>
+    :root {
+      --paper: #f7f3ea;
+      --paper-deep: #eee8dc;
+      --ink: #252823;
+      --muted: #666a62;
+      --line: rgba(59, 64, 55, .15);
+      --accent: #57705c;
+      --accent-soft: rgba(87, 112, 92, .11);
+      --card: rgba(255, 255, 255, .58);
+      --shadow: 0 24px 70px rgba(67, 62, 49, .09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(178, 193, 170, .25), transparent 30rem),
+        linear-gradient(135deg, var(--paper), var(--paper-deep));
+      font-family: ui-serif, "Iowan Old Style", "Songti SC", "Noto Serif CJK SC",
+        "Noto Serif KR", Georgia, serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .shell {
+      width: min(100% - 32px, 980px);
+      margin: 0 auto;
+      padding: 28px 0 72px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 650;
+      letter-spacing: -.02em;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      color: white;
+      border-radius: 11px;
+      background: var(--accent);
+      box-shadow: 0 8px 22px rgba(87, 112, 92, .24);
+    }
+
+    .mark::before {
+      content: "";
+      width: 16px;
+      height: 19px;
+      border-radius: 2px;
+      background:
+        linear-gradient(white, white) 4px 5px / 8px 1px no-repeat,
+        linear-gradient(white, white) 4px 9px / 8px 1px no-repeat,
+        linear-gradient(white, white) 4px 13px / 5px 1px no-repeat;
+      border: 1px solid rgba(255,255,255,.85);
+    }
+
+    .language-picker {
+      display: flex;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.45);
+      backdrop-filter: blur(12px);
+    }
+
+    .language-picker button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      background: transparent;
+      font: 600 13px/1 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+    .language-picker button:hover { color: var(--ink); }
+
+    .language-picker button[aria-pressed="true"] {
+      color: white;
+      background: var(--accent);
+      box-shadow: 0 3px 10px rgba(87, 112, 92, .2);
+    }
+
+    .hero {
+      padding: 16px 0 52px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--accent);
+      font: 700 12px/1.4 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(42px, 8vw, 76px);
+      font-weight: 500;
+      line-height: 1.04;
+      letter-spacing: -.055em;
+    }
+
+    .lede {
+      max-width: 650px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.75;
+    }
+
+    .date {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 8px 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font: 600 12px/1.2 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .date::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 70px;
+      padding-top: 48px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .toc-title {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font: 700 11px/1.2 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .toc a {
+      display: block;
+      padding: 6px 0;
+      color: var(--muted);
+      font: 500 13px/1.4 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-decoration: none;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    article section {
+      scroll-margin-top: 28px;
+      padding-bottom: 40px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(23px, 3vw, 30px);
+      font-weight: 550;
+      line-height: 1.3;
+      letter-spacing: -.025em;
+    }
+
+    p { margin: 0 0 14px; }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 1.35em;
+    }
+
+    li { margin: 7px 0; }
+
+    .promise {
+      margin-bottom: 40px;
+      padding: 24px 26px;
+      border: 1px solid rgba(87, 112, 92, .2);
+      border-radius: 20px;
+      background: var(--accent-soft);
+    }
+
+    .promise strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 28px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font: 13px/1.6 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    [data-lang-panel] { animation: reveal .32s ease both; }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(87, 112, 92, .4);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 640px); padding-top: 18px; }
+      .topbar { margin-bottom: 34px; }
+      .brand-text { display: none; }
+      .language-picker button { padding: 8px 10px; }
+      .hero { padding-bottom: 38px; }
+      .layout { display: block; padding-top: 34px; }
+      .toc { display: none; }
+      article section { padding-bottom: 32px; }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #171a17;
+        --paper-deep: #20231f;
+        --ink: #ecebe4;
+        --muted: #acafa6;
+        --line: rgba(236, 235, 228, .12);
+        --accent: #9ab59e;
+        --accent-soft: rgba(154, 181, 158, .1);
+        --card: rgba(36, 40, 35, .68);
+        --shadow: 0 24px 70px rgba(0, 0, 0, .2);
+      }
+      .language-picker { background: rgba(36, 40, 35, .6); }
+      .language-picker button[aria-pressed="true"] { color: #152017; background: var(--accent); }
+      .mark { color: #18201a; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand" aria-label="记事本 NativeNotes">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="brand-text">记事本 · NativeNotes</span>
+      </div>
+      <nav class="language-picker" aria-label="Language">
+        <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="ko" aria-pressed="false">한국어</button>
+      </nav>
+    </header>
+
+    <div id="content" aria-live="polite"></div>
+
+    <footer id="footer"></footer>
+  </main>
+
+  <script>
+    const policies = {
+      zh: {
+        htmlLang: "zh-Hans",
+        title: "隐私政策 · 记事本",
+        eyebrow: "隐私政策",
+        heading: "你的笔记，始终属于你。",
+        lede: "记事本（NativeNotes）重视你的隐私。我们以尽量少的数据、尽量清晰的方式设计应用。",
+        updated: "生效日期：2026年7月29日",
+        tocTitle: "目录",
+        promiseTitle: "我们的核心承诺",
+        promise: "记事本不会收集、出售或用于广告追踪你的个人信息。你的笔记内容由你掌控。",
+        sections: [
+          ["overview", "1. 适用范围", ["本隐私政策适用于记事本（NativeNotes）iOS 应用及其桌面小组件。使用本应用即表示你了解本政策所说明的数据处理方式。"]],
+          ["collection", "2. 我们收集的信息", ["我们不收集个人信息，不要求你注册账户，也不使用第三方分析、广告或追踪服务。应用的 Apple 隐私清单声明不进行跟踪，也不收集数据。"]],
+          ["storage", "3. 本地存储的数据", ["为提供记事功能，以下内容可能保存在你的设备上：", ["你创建的笔记、文件夹与富文本内容", "你选择添加的图片、文件及其他附件", "应用偏好、主题、首页背景与界面设置", "笔记版本记录、锁定状态和提醒设置", "为小组件显示而保存的最近笔记摘要"], "这些数据由 iOS 的应用沙盒和系统安全机制保护。除非你主动通过系统分享功能导出内容，否则我们无法访问这些数据。"]],
+          ["permissions", "4. 系统权限", ["应用仅在相关功能需要时请求系统权限：", ["照片：仅用于导入你主动选择的图片。应用不会浏览你的完整照片图库。", "通知：仅用于发送你设置的笔记提醒。你可随时在 iOS 设置中关闭通知。"], "拒绝这些权限不会影响其他不相关功能。"]],
+          ["security", "5. 数据安全与保留", ["我们通过设备本地存储、iOS 数据保护和应用沙盒来降低未经授权访问的风险。数据将保留在你的设备上，直至你删除相应内容或卸载应用。任何电子存储方式都无法保证绝对安全，请妥善保护设备与系统密码。"]],
+          ["children", "6. 儿童隐私", ["本应用不会有意收集任何用户（包括儿童）的个人信息。由于我们不运营账户或服务器，也不会据此建立用户档案。"]],
+          ["changes", "7. 政策更新", ["我们可能因功能或法律要求变化而更新本政策。更新后的版本会在此页面公布，并注明新的生效日期。重大变化将通过适当方式告知。"]],
+          ["contact", "8. 联系我们", ["如果你对本隐私政策有疑问，请通过本应用在 App Store 产品页面所列的支持渠道联系我们。"]]
+        ],
+        footer: "© 2026 NativeNotes. 你的文字，安静地留在你的设备上。"
+      },
+      en: {
+        htmlLang: "en",
+        title: "Privacy Policy · NativeNotes",
+        eyebrow: "Privacy Policy",
+        heading: "Your notes remain yours.",
+        lede: "NativeNotes respects your privacy. The app is designed to use as little data as possible and explain its practices clearly.",
+        updated: "Effective: July 29, 2026",
+        tocTitle: "On this page",
+        promiseTitle: "Our core commitment",
+        promise: "NativeNotes does not collect, sell, or use your personal information for advertising or tracking. You stay in control of your notes.",
+        sections: [
+          ["overview", "1. Scope", ["This Privacy Policy applies to the NativeNotes iOS app and its home-screen widget. By using the app, you acknowledge the data practices described here."]],
+          ["collection", "2. Information we collect", ["We do not collect personal information, require an account, or use third-party analytics, advertising, or tracking services. The app’s Apple privacy manifest declares no tracking and no data collection."]],
+          ["storage", "3. Data stored on your device", ["To provide its note-taking features, the app may store the following on your device:", ["Notes, folders, and rich-text content you create", "Photos, files, and other attachments you choose to add", "App preferences, themes, home backgrounds, and interface settings", "Note version history, lock state, and reminder settings", "Recent-note summaries used by the widget"], "This data is protected by the iOS app sandbox and system security. We cannot access it unless you choose to export content using the system sharing features."]],
+          ["permissions", "4. System permissions", ["The app requests system permissions only when needed for a feature:", ["Photos: used only to import images you explicitly select. The app does not browse your full photo library.", "Notifications: used only for note reminders you schedule. You may disable notifications at any time in iOS Settings."], "Declining a permission does not affect unrelated features."]],
+          ["security", "5. Security and retention", ["We reduce the risk of unauthorized access through on-device storage, iOS data protection, and app sandboxing. Data remains on your device until you delete the relevant content or uninstall the app. No method of electronic storage is completely secure, so please protect your device and passcode."]],
+          ["children", "6. Children’s privacy", ["The app does not knowingly collect personal information from anyone, including children. Because we do not operate accounts or servers, we do not create user profiles."]],
+          ["changes", "7. Changes to this policy", ["We may update this policy when features or legal requirements change. The revised version will be posted on this page with a new effective date. We will provide appropriate notice of material changes."]],
+          ["contact", "8. Contact us", ["If you have questions about this Privacy Policy, please contact us through the support channel listed on the app’s App Store product page."]]
+        ],
+        footer: "© 2026 NativeNotes. Your words, quietly kept on your device."
+      },
+      ko: {
+        htmlLang: "ko",
+        title: "개인정보 처리방침 · NativeNotes",
+        eyebrow: "개인정보 처리방침",
+        heading: "당신의 메모는 언제나 당신의 것입니다.",
+        lede: "NativeNotes는 사용자의 개인정보를 소중히 여깁니다. 필요한 데이터는 최소화하고 처리 방식을 명확하게 안내합니다.",
+        updated: "시행일: 2026년 7월 29일",
+        tocTitle: "목차",
+        promiseTitle: "핵심 약속",
+        promise: "NativeNotes는 개인정보를 수집하거나 판매하지 않으며, 광고 또는 추적에 사용하지 않습니다. 메모에 대한 통제권은 사용자에게 있습니다.",
+        sections: [
+          ["overview", "1. 적용 범위", ["본 개인정보 처리방침은 NativeNotes iOS 앱과 홈 화면 위젯에 적용됩니다. 앱을 사용하면 여기에 설명된 데이터 처리 방식을 이해한 것으로 간주됩니다."]],
+          ["collection", "2. 수집하는 정보", ["당사는 개인정보를 수집하지 않고 계정 가입을 요구하지 않으며, 제3자 분석·광고·추적 서비스를 사용하지 않습니다. 앱의 Apple 개인정보 보호 매니페스트에는 추적 및 데이터 수집이 없다고 명시되어 있습니다."]],
+          ["storage", "3. 기기에 저장되는 데이터", ["메모 기능을 제공하기 위해 다음 정보가 사용자의 기기에 저장될 수 있습니다:", ["사용자가 작성한 메모, 폴더 및 서식 있는 텍스트", "사용자가 직접 추가한 사진, 파일 및 기타 첨부 항목", "앱 환경설정, 테마, 홈 배경 및 화면 설정", "메모 버전 기록, 잠금 상태 및 알림 설정", "위젯 표시를 위한 최근 메모 요약"], "이 데이터는 iOS 앱 샌드박스와 시스템 보안 기능으로 보호됩니다. 사용자가 시스템 공유 기능으로 콘텐츠를 내보내지 않는 한 당사는 해당 데이터에 접근할 수 없습니다."]],
+          ["permissions", "4. 시스템 권한", ["앱은 관련 기능에 필요한 경우에만 시스템 권한을 요청합니다:", ["사진: 사용자가 명시적으로 선택한 이미지를 가져오는 데만 사용됩니다. 전체 사진 보관함을 탐색하지 않습니다.", "알림: 사용자가 설정한 메모 알림을 보내는 데만 사용됩니다. iOS 설정에서 언제든지 알림을 끌 수 있습니다."], "권한을 허용하지 않아도 관련 없는 다른 기능에는 영향을 주지 않습니다."]],
+          ["security", "5. 데이터 보안 및 보관", ["기기 내 저장, iOS 데이터 보호 및 앱 샌드박스를 통해 무단 접근 위험을 줄입니다. 데이터는 사용자가 해당 콘텐츠를 삭제하거나 앱을 제거할 때까지 기기에 보관됩니다. 어떠한 전자 저장 방식도 절대적인 안전을 보장할 수 없으므로 기기와 암호를 안전하게 관리해 주세요."]],
+          ["children", "6. 아동의 개인정보", ["본 앱은 아동을 포함한 누구의 개인정보도 고의로 수집하지 않습니다. 당사는 계정이나 서버를 운영하지 않으므로 사용자 프로필을 생성하지 않습니다."]],
+          ["changes", "7. 처리방침 변경", ["기능 또는 법적 요건이 변경될 경우 본 방침을 업데이트할 수 있습니다. 개정된 방침은 새로운 시행일과 함께 이 페이지에 게시되며, 중요한 변경 사항은 적절한 방식으로 안내합니다."]],
+          ["contact", "8. 문의", ["본 개인정보 처리방침에 관한 문의는 앱의 App Store 제품 페이지에 기재된 지원 채널을 통해 연락해 주세요."]]
+        ],
+        footer: "© 2026 NativeNotes. 당신의 글은 기기에 조용히 보관됩니다."
+      }
+    };
+
+    const content = document.querySelector("#content");
+    const footer = document.querySelector("#footer");
+    const buttons = [...document.querySelectorAll("[data-lang]")];
+
+    function paragraphs(items) {
+      return items.map(item => Array.isArray(item)
+        ? `<ul>${item.map(entry => `<li>${entry}</li>`).join("")}</ul>`
+        : `<p>${item}</p>`).join("");
+    }
+
+    function render(language) {
+      const policy = policies[language] || policies.zh;
+      document.documentElement.lang = policy.htmlLang;
+      document.title = policy.title;
+      document.querySelector('meta[name="description"]').content = policy.lede;
+
+      const links = policy.sections.map(([id, title]) =>
+        `<a href="#${id}">${title.replace(/^\d+\.\s*/, "")}</a>`).join("");
+      const sections = policy.sections.map(([id, title, body]) =>
+        `<section id="${id}"><h2>${title}</h2>${paragraphs(body)}</section>`).join("");
+
+      content.innerHTML = `
+        <div data-lang-panel>
+          <section class="hero">
+            <p class="eyebrow">${policy.eyebrow}</p>
+            <h1>${policy.heading}</h1>
+            <p class="lede">${policy.lede}</p>
+            <span class="date">${policy.updated}</span>
+          </section>
+          <div class="layout">
+            <aside class="toc" aria-label="${policy.tocTitle}">
+              <p class="toc-title">${policy.tocTitle}</p>
+              ${links}
+            </aside>
+            <article>
+              <div class="promise">
+                <strong>${policy.promiseTitle}</strong>
+                ${policy.promise}
+              </div>
+              ${sections}
+            </article>
+          </div>
+        </div>`;
+      footer.textContent = policy.footer;
+      buttons.forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === language));
+      });
+      try { localStorage.setItem("privacy-language", language); } catch (_) {}
+    }
+
+    buttons.forEach(button => button.addEventListener("click", () => render(button.dataset.lang)));
+
+    let savedLanguage;
+    try { savedLanguage = localStorage.getItem("privacy-language"); } catch (_) {}
+    const browserLanguage = navigator.language.toLowerCase();
+    const initialLanguage = savedLanguage && policies[savedLanguage]
+      ? savedLanguage
+      : browserLanguage.startsWith("ko") ? "ko"
+      : browserLanguage.startsWith("en") ? "en"
+      : "zh";
+    render(initialLanguage);
+  </script>
+</body>
+</html>
